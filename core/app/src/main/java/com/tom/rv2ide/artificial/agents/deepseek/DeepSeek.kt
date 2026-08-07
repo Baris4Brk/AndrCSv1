@@ -27,6 +27,7 @@ import com.tom.rv2ide.artificial.project.awareness.ProjectTreeResult
 import com.tom.rv2ide.artificial.file.AIFileWriter
 import com.tom.rv2ide.artificial.file.FileWriteResult
 import com.tom.rv2ide.artificial.exceptions.*
+import com.tom.rv2ide.artificial.secrets.ApiKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -63,8 +64,7 @@ class DeepSeek : AIAgent {
               }
               
               override fun getApiKey(): String? {
-                  val prefManager = com.tom.rv2ide.preferences.internal.prefManager
-                  return prefManager.getString("ai_agent_deepseek_api_key", "")?.takeIf { it.isNotBlank() }
+                  return ApiKey.getDeepseekApiKey().takeIf { it.isNotBlank() }
               }
           })
       }
@@ -290,8 +290,6 @@ class DeepSeek : AIAgent {
       requestBody.put("temperature", 0.7)
       requestBody.put("max_tokens", 4096)
       
-      android.util.Log.d("DeepSeek", "Request body: ${requestBody.toString()}")
-      
       connection.outputStream.use { os ->
         os.write(requestBody.toString().toByteArray())
       }
@@ -372,32 +370,7 @@ class DeepSeek : AIAgent {
   }
 
   private fun readRelevantFiles(): Map<String, String> {
-    val filesContent = mutableMapOf<String, String>()
-    val tree = projectTreeResult?.tree ?: return filesContent
-    
-    val filePaths = tree.lines().filter { it.isNotBlank() }
-    
-    filePaths.forEach { filePath ->
-      val trimmedPath = filePath.trim()
-      val file = File(trimmedPath)
-      
-      if (file.isFile && 
-          (trimmedPath.endsWith(".kt") || 
-           trimmedPath.endsWith(".java") ||
-           trimmedPath.endsWith(".xml") ||
-           trimmedPath.endsWith(".gradle") ||
-           trimmedPath.endsWith(".gradle.kts")) &&
-          !trimmedPath.contains("/build/") && 
-          !trimmedPath.contains("/.gradle/")) {
-        try {
-          val content = file.readText()
-          filesContent[trimmedPath] = content
-        } catch (e: Exception) {
-        }
-      }
-    }
-    
-    return filesContent
+    return projectTreeResult?.readRelevantFiles() ?: emptyMap()
   }
 
   fun readFile(filePath: String): String? {

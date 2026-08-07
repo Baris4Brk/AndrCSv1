@@ -97,7 +97,7 @@ android {
 
   buildTypes {
     debug {
-      signingConfig = signingConfigs.getByName("custom")
+      signingConfig = signingConfigs.getByName("debug")
     }
 
     release {
@@ -296,6 +296,8 @@ dependencies {
   implementation(projects.xml.aaptcompiler)
   implementation(projects.xml.lsp)
   implementation(projects.xml.utils)
+
+  testImplementation(libs.tests.junit)
 
   // This is to build the tooling-api-impl project before the app is built
   // So we always copy the latest JAR file to assets

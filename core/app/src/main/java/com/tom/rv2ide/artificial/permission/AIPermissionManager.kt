@@ -19,6 +19,7 @@ package com.tom.rv2ide.artificial.permissions
 
 import android.content.Context
 import android.content.SharedPreferences
+import java.io.File
 
 /*
  * @author Mohammed-baqer-null @ https://github.com/Mohammed-baqer-null
@@ -34,6 +35,25 @@ class AIPermissionManager(private val context: Context) {
         private const val KEY_ALLOWED_DIRECTORIES = "allowed_directories"
         private const val KEY_REQUIRE_CONFIRMATION = "require_confirmation"
         private const val KEY_AUTO_BACKUP = "auto_backup"
+    }
+
+    /** Seeds safe defaults once without overwriting later user choices. */
+    fun initializeDefaults() {
+        val editor = prefs.edit()
+        var changed = false
+        if (!prefs.contains(KEY_FILE_WRITE_ENABLED)) {
+            editor.putBoolean(KEY_FILE_WRITE_ENABLED, true)
+            changed = true
+        }
+        if (!prefs.contains(KEY_REQUIRE_CONFIRMATION)) {
+            editor.putBoolean(KEY_REQUIRE_CONFIRMATION, true)
+            changed = true
+        }
+        if (!prefs.contains(KEY_AUTO_BACKUP)) {
+            editor.putBoolean(KEY_AUTO_BACKUP, true)
+            changed = true
+        }
+        if (changed) editor.apply()
     }
 
     /**
@@ -111,7 +131,12 @@ class AIPermissionManager(private val context: Context) {
     // Add allowed directory
     fun addAllowedDirectory(path: String) {
         val current = getAllowedDirectories().toMutableSet()
-        current.add(path)
+        val canonicalPath = try {
+            File(path).canonicalPath
+        } catch (_: Exception) {
+            return
+        }
+        current.add(canonicalPath)
         prefs.edit().putStringSet(KEY_ALLOWED_DIRECTORIES, current).apply()
     }
 
@@ -123,7 +148,12 @@ class AIPermissionManager(private val context: Context) {
     // Remove allowed directory
     fun removeAllowedDirectory(path: String) {
         val current = getAllowedDirectories().toMutableSet()
-        current.remove(path)
+        val canonicalPath = try {
+            File(path).canonicalPath
+        } catch (_: Exception) {
+            path
+        }
+        current.remove(canonicalPath)
         prefs.edit().putStringSet(KEY_ALLOWED_DIRECTORIES, current).apply()
     }
 
@@ -139,9 +169,20 @@ class AIPermissionManager(private val context: Context) {
         
         val allowedDirs = getAllowedDirectories()
         if (allowedDirs.isEmpty()) return false
-        
+
+        val candidate = try {
+            File(filePath).canonicalFile.toPath()
+        } catch (_: Exception) {
+            return false
+        }
+
         return allowedDirs.any { allowedDir ->
-            filePath.startsWith(allowedDir)
+            try {
+                val root = File(allowedDir).canonicalFile
+                root.isDirectory && candidate.startsWith(root.toPath())
+            } catch (_: Exception) {
+                false
+            }
         }
     }
 
