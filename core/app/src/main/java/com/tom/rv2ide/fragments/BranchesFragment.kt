@@ -93,7 +93,7 @@ class BranchesFragment : Fragment() {
         
         viewModel.currentBranch.observe(viewLifecycleOwner) { branch ->
             currentBranch = branch
-            binding.textCurrentBranch.text = "Current: $branch"
+            binding.textCurrentBranch.text = "Geçerli: $branch"
             adapter.notifyDataSetChanged()
         }
         
@@ -120,33 +120,33 @@ class BranchesFragment : Fragment() {
         val editText = dialogView.findViewById<TextInputEditText>(R.id.editTextBranchName)
         
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Create New Branch")
+            .setTitle("Yeni Dal Oluştur")
             .setView(dialogView)
-            .setPositiveButton("Create") { _, _ ->
+            .setPositiveButton("Oluştur") { _, _ ->
                 val branchName = editText.text.toString().trim()
                 if (branchName.isNotBlank()) {
                     viewModel.createBranch(branchName)
                 } else {
-                    Snackbar.make(binding.root, "Branch name cannot be empty", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "Dal adı boş bırakılamaz", Snackbar.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("İptal", null)
             .show()
     }
     
     private fun showDeleteConfirmation(branch: String) {
         if (branch == currentBranch) {
-            Snackbar.make(binding.root, "Cannot delete current branch", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, "Geçerli dal silinemez", Snackbar.LENGTH_SHORT).show()
             return
         }
         
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Delete Branch")
-            .setMessage("Are you sure you want to delete branch '$branch'?")
-            .setPositiveButton("Delete") { _, _ ->
+            .setTitle("Dalı Sil")
+            .setMessage("'$branch' dalını silmek istediğinizden emin misiniz?")
+            .setPositiveButton("Sil") { _, _ ->
                 viewModel.deleteBranch(branch)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("İptal", null)
             .show()
     }
     
