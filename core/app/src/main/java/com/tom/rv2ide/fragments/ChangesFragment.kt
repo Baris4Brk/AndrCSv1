@@ -74,19 +74,19 @@ class ChangesFragment : Fragment() {
         val editText = dialogView.findViewById<TextInputEditText>(R.id.editTextCommitMessage)
         
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Commit Changes")
+            .setTitle("Değişiklikleri Kaydet")
             .setView(dialogView)
-            .setPositiveButton("Commit") { _, _ ->
+            .setPositiveButton("Kaydet") { _, _ ->
                 val message = editText.text.toString()
                 if (message.isNotBlank()) {
                     val author = prefsManager.getGitUserName()
                     val email = prefsManager.getGitUserEmail()
                     viewModel.commit(message, author, email)
                 } else {
-                    Snackbar.make(binding.root, "Commit message cannot be empty", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "Commit mesajı boş bırakılamaz", Snackbar.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("İptal", null)
             .show()
     }
 
@@ -142,12 +142,12 @@ class ChangesFragment : Fragment() {
     
     private fun showDiscardConfirmation(filePath: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Discard Changes")
-            .setMessage("Are you sure you want to discard changes in $filePath? This cannot be undone.")
-            .setPositiveButton("Discard") { _, _ ->
+            .setTitle("Değişiklikleri At")
+            .setMessage("$filePath içindeki değişiklikleri atmak istediğinizden emin misiniz? Bu işlem geri alınamaz.")
+            .setPositiveButton("At") { _, _ ->
                 viewModel.discardChanges(filePath)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("İptal", null)
             .show()
     }
     
