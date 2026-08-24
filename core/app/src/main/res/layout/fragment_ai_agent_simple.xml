@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Header -->
+        <!-- Başlık alanı; mevcut davranış korunuyor. -->
         <com.google.android.material.appbar.MaterialToolbar
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -25,9 +25,7 @@
 
         </com.google.android.material.appbar.MaterialToolbar>
 
-        
-
-        <!-- AI Agent Notice in ScrollView with Edge Effects -->
+        <!-- Agent bilgilendirme alanı. -->
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -51,7 +49,8 @@
                 android:textColor="?attr/colorOnSurface" />
 
         </androidx.core.widget.NestedScrollView>
-        <!-- Agent Dropdown (top, outside scroll) -->
+
+        <!-- Agent seçimi. -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/agent_dropdown_layout"
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -79,7 +78,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Input Area (top, outside scroll) -->
+        <!-- Kullanıcı mesaj giriş alanı. -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,7 +98,7 @@
                     android:id="@+id/til_prompt"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:hint="Ask AI anything..."
+                    android:hint="@string/ai_agent_ask_hint"
                     app:boxBackgroundMode="none"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btn_send"
@@ -121,6 +120,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_send"
+                    android:contentDescription="@string/ai_agent_send"
                     app:fabSize="mini"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -130,7 +130,7 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Chat Messages Area -->
+        <!-- Sohbet mesajları. -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_messages"
             android:layout_width="match_parent"
@@ -142,7 +142,7 @@
 
     </LinearLayout>
 
-    <!-- Loading Indicator -->
+    <!-- Agent işlem yaparken gösterilen ilerleme çubuğu. -->
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progress_indicator"
         android:layout_width="match_parent"
