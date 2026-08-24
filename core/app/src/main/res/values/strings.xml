@@ -26,7 +26,7 @@
   <string name="sub_module_name_valid">Geçerli modül adı</string>
   <string name="sub_module_name_invalid">Geçersiz modül adı</string>
   <string name="sub_module_create">Modül Oluştur</string>
-  <string name="sub_module_created_success">'%1$s' modülü başarıyla oluşturuldu!</string>
+  <string name="sub_module_created_success">%1$s modülü başarıyla oluşturuldu!</string>
   <string name="sub_module_created_error">Modül oluşturulamadı: %1$s</string>
   <string name="sub_module_info_title">Alt Modüller Hakkında</string>
   <string name="sub_module_info_description">Alt modüller, projenizi daha küçük ve yönetilebilir bileşenlere ayırmanıza yardımcı olur. Her modülün kendi bağımlılıkları ve derleme yapılandırması olabilir.</string>
