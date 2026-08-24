@@ -31,7 +31,7 @@ import kotlinx.parcelize.Parcelize
 class AIAgentPreferencesScreen(
     override val key: String = "idepref_ai_agent",
     override val title: Int = string.ai_agent_title,
-    override val summary: Int? = string.ai_agent_description,
+    override val summary: Int? = R.string.ai_agent_description,
     override val children: List<IPreference> = mutableListOf(),
 ) : IPreferenceScreen() {
 
@@ -79,7 +79,6 @@ private class AIAgentConfig(
   }
 }
 
-
 @Parcelize
 private class AIAgentEnabled(
     override val key: String = "ai_agent_enabled",
@@ -97,12 +96,11 @@ private class AIAgentEnabled(
   override fun onCreatePreference(context: Context): Preference {
     return super.onCreatePreference(context).apply {
       key = "ai_agent_enabled"
-      title = context.getString(R.string.ai_agent_enable)
-      summary = context.getString(R.string.ai_agent_enable_summary)
+      title = "Yapay Zekâ Agent'ını Etkinleştir"
+      summary = "Yapay zekâ destekli kod üretimini etkinleştir"
     }
   }
 }
-
 
 @Parcelize
 private class GrokApiKey(
@@ -113,263 +111,224 @@ private class GrokApiKey(
   @IgnoredOnParcel private var preference: Preference? = null
 
   override fun onCreatePreference(context: Context): Preference {
-    preference =
-        androidx.preference.Preference(context).apply {
-          key = "ai_agent_grok_api_key"
-          title = context.getString(R.string.ai_agent_grok_api_key)
-          summary = getSummaryText()
-          isEnabled = prefManager.getBoolean("ai_agent_enabled", false)
-        }
+    preference = androidx.preference.Preference(context).apply {
+      key = "ai_agent_grok_api_key"
+      title = "Grok API Anahtarı"
+      summary = getSummaryText()
+      isEnabled = prefManager.getBoolean("ai_agent_enabled", false)
+    }
     return preference!!
   }
 
   override fun onPreferenceClick(preference: Preference): Boolean {
     val context = preference.context
-
     val editText = android.widget.EditText(context)
     editText.setText(ApiKey.getGrokApiKey())
-    editText.hint = "Enter your xAI Grok API key"
+    editText.hint = "xAI Grok API anahtarınızı girin"
 
-    val dialog =
-        com.google.android.material.dialog
-            .MaterialAlertDialogBuilder(context)
-            .setTitle("Grok API Key")
-            .setMessage("Enter your xAI Grok API key")
-            .setView(editText)
-            .setPositiveButton("Save") { _, _ ->
-              val apiKey = editText.text.toString().trim()
-              ApiKey.setGrokApiKey(apiKey)
-              preference.summary = getSummaryText()
-            }
-            .setNegativeButton("Cancel", null)
-            .create()
+    val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(context)
+        .setTitle("Grok API Anahtarı")
+        .setMessage("xAI Grok API anahtarınızı girin")
+        .setView(editText)
+        .setPositiveButton("Kaydet") { _, _ ->
+          val apiKey = editText.text.toString().trim()
+          ApiKey.setGrokApiKey(apiKey)
+          preference.summary = getSummaryText()
+        }
+        .setNegativeButton("İptal", null)
+        .create()
 
     dialog.show()
     return true
   }
 
-  fun setEnabled(enabled: Boolean) {
-    preference?.isEnabled = enabled
-  }
+  fun setEnabled(enabled: Boolean) { preference?.isEnabled = enabled }
 
   private fun getSummaryText(): String {
-    val apiKey = ApiKey.getGrokApiKey()
-    return if (apiKey.isBlank()) "Click to set API key" else "API key configured"
+    return if (ApiKey.getGrokApiKey().isBlank()) "API anahtarını ayarlamak için dokunun" else "API anahtarı yapılandırıldı"
   }
 }
 
 @Parcelize
 private class GeminiApiKey(
     override val key: String = "ai_agent_gemini_api_key",
-    override val title: Int = R.string.ai_agent_api_key,
+    override val title: Int = string.ai_agent_api_key,
 ) : BasePreference() {
 
   @IgnoredOnParcel private var preference: Preference? = null
 
   override fun onCreatePreference(context: Context): Preference {
-    preference =
-        androidx.preference.Preference(context).apply {
-          key = "ai_agent_gemini_api_key"
-          title = context.getString(R.string.ai_agent_api_key)
-          summary = getSummaryText()
-          isEnabled = prefManager.getBoolean("ai_agent_enabled", false)
-        }
+    preference = androidx.preference.Preference(context).apply {
+      key = "ai_agent_gemini_api_key"
+      title = "Gemini API Anahtarı"
+      summary = getSummaryText()
+      isEnabled = prefManager.getBoolean("ai_agent_enabled", false)
+    }
     return preference!!
   }
 
   override fun onPreferenceClick(preference: Preference): Boolean {
     val context = preference.context
-
     val editText = android.widget.EditText(context)
     editText.setText(ApiKey.getGeminiApiKey())
-    editText.hint = "Enter your Google Gemini API key"
+    editText.hint = "Google Gemini API anahtarınızı girin"
 
-    val dialog =
-        com.google.android.material.dialog
-            .MaterialAlertDialogBuilder(context)
-            .setTitle("Gemini API Key")
-            .setMessage("Enter your Google Gemini API key")
-            .setView(editText)
-            .setPositiveButton("Save") { _, _ ->
-              val apiKey = editText.text.toString().trim()
-              ApiKey.setGeminiApiKey(apiKey)
-              preference.summary = getSummaryText()
-            }
-            .setNegativeButton("Cancel", null)
-            .create()
+    val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(context)
+        .setTitle("Gemini API Anahtarı")
+        .setMessage("Google Gemini API anahtarınızı girin")
+        .setView(editText)
+        .setPositiveButton("Kaydet") { _, _ ->
+          ApiKey.setGeminiApiKey(editText.text.toString().trim())
+          preference.summary = getSummaryText()
+        }
+        .setNegativeButton("İptal", null)
+        .create()
 
     dialog.show()
     return true
   }
 
-  fun setEnabled(enabled: Boolean) {
-    preference?.isEnabled = enabled
-  }
+  fun setEnabled(enabled: Boolean) { preference?.isEnabled = enabled }
 
   private fun getSummaryText(): String {
-    val apiKey = ApiKey.getGeminiApiKey()
-    return if (apiKey.isBlank()) "Click to set API key" else "API key configured"
+    return if (ApiKey.getGeminiApiKey().isBlank()) "API anahtarını ayarlamak için dokunun" else "API anahtarı yapılandırıldı"
   }
 }
 
 @Parcelize
 private class DeepseekApiKey(
     override val key: String = "ai_agent_deepseek_api_key",
-    override val title: Int = R.string.ai_agent_deepseek_api_key,
+    override val title: Int = string.ai_agent_deepseek_api_key,
 ) : BasePreference() {
 
   @IgnoredOnParcel private var preference: Preference? = null
 
   override fun onCreatePreference(context: Context): Preference {
-    preference =
-        androidx.preference.Preference(context).apply {
-          key = "ai_agent_deepseek_api_key"
-          title = context.getString(R.string.ai_agent_deepseek_api_key)
-          summary = getSummaryText()
-          isEnabled = prefManager.getBoolean("ai_agent_enabled", false)
-        }
+    preference = androidx.preference.Preference(context).apply {
+      key = "ai_agent_deepseek_api_key"
+      title = "DeepSeek API Anahtarı"
+      summary = getSummaryText()
+      isEnabled = prefManager.getBoolean("ai_agent_enabled", false)
+    }
     return preference!!
   }
 
   override fun onPreferenceClick(preference: Preference): Boolean {
     val context = preference.context
-
     val editText = android.widget.EditText(context)
     editText.setText(ApiKey.getDeepseekApiKey())
-    editText.hint = "Enter your Deepseek API key"
+    editText.hint = "DeepSeek API anahtarınızı girin"
 
-    val dialog =
-        com.google.android.material.dialog
-            .MaterialAlertDialogBuilder(context)
-            .setTitle("Deepseek API Key")
-            .setMessage("Enter your Deepseek API key")
-            .setView(editText)
-            .setPositiveButton("Save") { _, _ ->
-              val apiKey = editText.text.toString().trim()
-              ApiKey.setDeepseekApiKey(apiKey)
-              preference.summary = getSummaryText()
-            }
-            .setNegativeButton("Cancel", null)
-            .create()
+    val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(context)
+        .setTitle("DeepSeek API Anahtarı")
+        .setMessage("DeepSeek API anahtarınızı girin")
+        .setView(editText)
+        .setPositiveButton("Kaydet") { _, _ ->
+          ApiKey.setDeepseekApiKey(editText.text.toString().trim())
+          preference.summary = getSummaryText()
+        }
+        .setNegativeButton("İptal", null)
+        .create()
 
     dialog.show()
     return true
   }
 
-  fun setEnabled(enabled: Boolean) {
-    preference?.isEnabled = enabled
-  }
+  fun setEnabled(enabled: Boolean) { preference?.isEnabled = enabled }
 
   private fun getSummaryText(): String {
-    val apiKey = ApiKey.getDeepseekApiKey()
-    return if (apiKey.isBlank()) "Click to set API key" else "API key configured"
+    return if (ApiKey.getDeepseekApiKey().isBlank()) "API anahtarını ayarlamak için dokunun" else "API anahtarı yapılandırıldı"
   }
 }
 
 @Parcelize
 private class OpenAIApiKey(
     override val key: String = "ai_agent_openai_api_key",
-    override val title: Int = R.string.ai_agent_openai_api_key,
+    override val title: Int = string.ai_agent_openai_api_key,
 ) : BasePreference() {
 
   @IgnoredOnParcel private var preference: Preference? = null
 
   override fun onCreatePreference(context: Context): Preference {
-    preference =
-        androidx.preference.Preference(context).apply {
-          key = "ai_agent_openai_api_key"
-          title = context.getString(R.string.ai_agent_openai_api_key)
-          summary = getSummaryText()
-          isEnabled = prefManager.getBoolean("ai_agent_enabled", false)
-        }
+    preference = androidx.preference.Preference(context).apply {
+      key = "ai_agent_openai_api_key"
+      title = "OpenAI API Anahtarı"
+      summary = getSummaryText()
+      isEnabled = prefManager.getBoolean("ai_agent_enabled", false)
+    }
     return preference!!
   }
 
   override fun onPreferenceClick(preference: Preference): Boolean {
     val context = preference.context
-
     val editText = android.widget.EditText(context)
     editText.setText(ApiKey.getOpenAIApiKey())
-    editText.hint = "Enter your OpenAI API key"
+    editText.hint = "OpenAI API anahtarınızı girin"
 
-    val dialog =
-        com.google.android.material.dialog
-            .MaterialAlertDialogBuilder(context)
-            .setTitle("OpenAI API Key")
-            .setMessage("Enter your OpenAI API key")
-            .setView(editText)
-            .setPositiveButton("Save") { _, _ ->
-              val apiKey = editText.text.toString().trim()
-              ApiKey.setOpenAIApiKey(apiKey)
-              preference.summary = getSummaryText()
-            }
-            .setNegativeButton("Cancel", null)
-            .create()
+    val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(context)
+        .setTitle("OpenAI API Anahtarı")
+        .setMessage("OpenAI API anahtarınızı girin")
+        .setView(editText)
+        .setPositiveButton("Kaydet") { _, _ ->
+          ApiKey.setOpenAIApiKey(editText.text.toString().trim())
+          preference.summary = getSummaryText()
+        }
+        .setNegativeButton("İptal", null)
+        .create()
 
     dialog.show()
     return true
   }
 
-  fun setEnabled(enabled: Boolean) {
-    preference?.isEnabled = enabled
-  }
+  fun setEnabled(enabled: Boolean) { preference?.isEnabled = enabled }
 
   private fun getSummaryText(): String {
-    val apiKey = ApiKey.getOpenAIApiKey()
-    return if (apiKey.isBlank()) "Click to set API key" else "API key configured"
+    return if (ApiKey.getOpenAIApiKey().isBlank()) "API anahtarını ayarlamak için dokunun" else "API anahtarı yapılandırıldı"
   }
 }
 
 @Parcelize
 private class AnthropicApiKey(
     override val key: String = "ai_agent_anthropic_api_key",
-    override val title: Int = R.string.ai_agent_anthropic_api_key,
+    override val title: Int = string.ai_agent_anthropic_api_key,
 ) : BasePreference() {
 
   @IgnoredOnParcel private var preference: Preference? = null
 
   override fun onCreatePreference(context: Context): Preference {
-    preference =
-        androidx.preference.Preference(context).apply {
-          key = "ai_agent_anthropic_api_key"
-          title = context.getString(R.string.ai_agent_anthropic_api_key)
-          summary = getSummaryText()
-          isEnabled = prefManager.getBoolean("ai_agent_enabled", false)
-        }
+    preference = androidx.preference.Preference(context).apply {
+      key = "ai_agent_anthropic_api_key"
+      title = "Anthropic API Anahtarı"
+      summary = getSummaryText()
+      isEnabled = prefManager.getBoolean("ai_agent_enabled", false)
+    }
     return preference!!
   }
 
   override fun onPreferenceClick(preference: Preference): Boolean {
     val context = preference.context
-
     val editText = android.widget.EditText(context)
     editText.setText(ApiKey.getAnthropicApiKey())
-    editText.hint = "Enter your Anthropic API key"
+    editText.hint = "Anthropic API anahtarınızı girin"
 
-    val dialog =
-        com.google.android.material.dialog
-            .MaterialAlertDialogBuilder(context)
-            .setTitle("Anthropic API Key")
-            .setMessage("Enter your Anthropic API key")
-            .setView(editText)
-            .setPositiveButton("Save") { _, _ ->
-              val apiKey = editText.text.toString().trim()
-              ApiKey.setAnthropicApiKey(apiKey)
-              preference.summary = getSummaryText()
-            }
-            .setNegativeButton("Cancel", null)
-            .create()
+    val dialog = com.google.android.material.dialog.MaterialAlertDialogBuilder(context)
+        .setTitle("Anthropic API Anahtarı")
+        .setMessage("Anthropic API anahtarınızı girin")
+        .setView(editText)
+        .setPositiveButton("Kaydet") { _, _ ->
+          ApiKey.setAnthropicApiKey(editText.text.toString().trim())
+          preference.summary = getSummaryText()
+        }
+        .setNegativeButton("İptal", null)
+        .create()
 
     dialog.show()
     return true
   }
 
-  fun setEnabled(enabled: Boolean) {
-    preference?.isEnabled = enabled
-  }
+  fun setEnabled(enabled: Boolean) { preference?.isEnabled = enabled }
 
   private fun getSummaryText(): String {
-    val apiKey = ApiKey.getAnthropicApiKey()
-    return if (apiKey.isBlank()) "Click to set API key" else "API key configured"
+    return if (ApiKey.getAnthropicApiKey().isBlank()) "API anahtarını ayarlamak için dokunun" else "API anahtarı yapılandırıldı"
   }
 }
