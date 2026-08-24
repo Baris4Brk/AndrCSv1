@@ -84,7 +84,7 @@ class FileBrowserDialogFragment : DialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, 
-        container: ViewGroup?,
+        container: ViewGroup?, 
         savedInstanceState: Bundle?
     ): View {
         _binding = DialogFileBrowserBinding.inflate(inflater, container, false)
@@ -125,8 +125,8 @@ class FileBrowserDialogFragment : DialogFragment() {
 
     private fun setupToolbar() {
         val title = when (operationType) {
-            OperationType.COPY -> "Select Destination (Copy)"
-            OperationType.MOVE -> "Select Destination (Move)"
+            OperationType.COPY -> "Hedefi Seç (Kopyala)"
+            OperationType.MOVE -> "Hedefi Seç (Taşı)"
         }
         binding.toolbarDialog.title = title
         
@@ -236,7 +236,7 @@ class FileBrowserDialogFragment : DialogFragment() {
                 } else {
                     Toast.makeText(
                         requireContext(), 
-                        "Please select a folder to paste into", 
+                        "Yapıştırmak için bir klasör seçin", 
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -251,8 +251,8 @@ class FileBrowserDialogFragment : DialogFragment() {
 
     private fun setupFab() {
         val fabText = when (operationType) {
-            OperationType.COPY -> "Paste Here"
-            OperationType.MOVE -> "Move Here"
+            OperationType.COPY -> "Buraya Yapıştır"
+            OperationType.MOVE -> "Buraya Taşı"
         }
         binding.fabPaste.contentDescription = fabText
         binding.fabPaste.setOnClickListener {
@@ -277,14 +277,14 @@ class FileBrowserDialogFragment : DialogFragment() {
         val destinationFile = File(destinationDir, sourceFile.name)
 
         if (!sourceFile.exists()) {
-            Toast.makeText(requireContext(), "Source file doesn't exist", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Kaynak dosya mevcut değil", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (destinationFile.exists()) {
             Toast.makeText(
                 requireContext(), 
-                "File already exists in destination", 
+                "Hedefte aynı ada sahip bir dosya zaten var", 
                 Toast.LENGTH_SHORT
             ).show()
             return
@@ -293,7 +293,7 @@ class FileBrowserDialogFragment : DialogFragment() {
         if (sourceFile.absolutePath == destinationFile.absolutePath) {
             Toast.makeText(
                 requireContext(), 
-                "Source and destination are the same", 
+                "Kaynak ve hedef aynı", 
                 Toast.LENGTH_SHORT
             ).show()
             return
@@ -303,7 +303,7 @@ class FileBrowserDialogFragment : DialogFragment() {
         if (sourceFile.isDirectory && destinationFile.absolutePath.startsWith(sourceFile.absolutePath)) {
             Toast.makeText(
                 requireContext(), 
-                "Cannot move a folder into itself", 
+                "Bir klasör kendi içine taşınamaz", 
                 Toast.LENGTH_SHORT
             ).show()
             return
@@ -311,7 +311,7 @@ class FileBrowserDialogFragment : DialogFragment() {
 
         Toast.makeText(
             requireContext(), 
-            "Moving ${sourceFile.name} to ${destinationDir.name}...", 
+            "${sourceFile.name}, ${destinationDir.name} klasörüne taşınıyor...", 
             Toast.LENGTH_SHORT
         ).show()
 
@@ -321,7 +321,7 @@ class FileBrowserDialogFragment : DialogFragment() {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             requireContext(), 
-                            "File moved successfully!", 
+                            "Dosya başarıyla taşındı!", 
                             Toast.LENGTH_SHORT
                         ).show()
                         onOperationCompleteListener?.invoke()
@@ -334,7 +334,7 @@ class FileBrowserDialogFragment : DialogFragment() {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             requireContext(), 
-                            "File moved successfully!", 
+                            "Dosya başarıyla taşındı!", 
                             Toast.LENGTH_SHORT
                         ).show()
                         onOperationCompleteListener?.invoke()
@@ -345,7 +345,7 @@ class FileBrowserDialogFragment : DialogFragment() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(), 
-                        "Failed to move: ${e.message}", 
+                        "Taşıma başarısız: ${e.message}", 
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -359,14 +359,14 @@ class FileBrowserDialogFragment : DialogFragment() {
         val destinationFile = File(destinationDir, sourceFile.name)
 
         if (!sourceFile.exists()) {
-            Toast.makeText(requireContext(), "Source file doesn't exist", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Kaynak dosya mevcut değil", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (destinationFile.exists()) {
             Toast.makeText(
                 requireContext(), 
-                "File already exists in destination", 
+                "Hedefte aynı ada sahip bir dosya zaten var", 
                 Toast.LENGTH_SHORT
             ).show()
             return
@@ -375,7 +375,7 @@ class FileBrowserDialogFragment : DialogFragment() {
         if (sourceFile.absolutePath == destinationFile.absolutePath) {
             Toast.makeText(
                 requireContext(), 
-                "Source and destination are the same", 
+                "Kaynak ve hedef aynı", 
                 Toast.LENGTH_SHORT
             ).show()
             return
@@ -383,7 +383,7 @@ class FileBrowserDialogFragment : DialogFragment() {
 
         Toast.makeText(
             requireContext(), 
-            "Copying ${sourceFile.name} to ${destinationDir.name}...", 
+            "${sourceFile.name}, ${destinationDir.name} klasörüne kopyalanıyor...", 
             Toast.LENGTH_SHORT
         ).show()
 
@@ -393,7 +393,7 @@ class FileBrowserDialogFragment : DialogFragment() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(), 
-                        "File copied successfully!", 
+                        "Dosya başarıyla kopyalandı!", 
                         Toast.LENGTH_SHORT
                     ).show()
                     animateDialogExit()
@@ -402,7 +402,7 @@ class FileBrowserDialogFragment : DialogFragment() {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
                         requireContext(), 
-                        "Failed to copy: ${e.message}", 
+                        "Kopyalama başarısız: ${e.message}", 
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -482,19 +482,19 @@ class FileBrowserDialogFragment : DialogFragment() {
         val file = File(path)
 
         if (!file.exists()) {
-            Toast.makeText(requireContext(), "Directory doesn't exist: ${file.name}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Klasör mevcut değil: ${file.name}", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (!file.canRead()) {
-            Toast.makeText(requireContext(), "Cannot read directory: ${file.name}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Klasör okunamıyor: ${file.name}", Toast.LENGTH_SHORT).show()
             return
         }
 
         val filesAndFolders = file.listFiles()
 
         if (filesAndFolders == null) {
-            Toast.makeText(requireContext(), "Cannot access folder", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Klasöre erişilemiyor", Toast.LENGTH_SHORT).show()
             return
         }
 
