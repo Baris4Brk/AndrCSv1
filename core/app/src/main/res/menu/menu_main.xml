@@ -4,77 +4,77 @@
 
     <item
         android:id="@+id/action_search"
-        android:title="Search"
+        android:title="Ara"
         android:icon="@drawable/ic_search"
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
 
     <item
         android:id="@+id/action_filter"
-        android:title="Filter"
+        android:title="Filtrele"
         app:showAsAction="never">
         <menu>
             <item
                 android:id="@+id/filter_all"
-                android:title="Show All"
+                android:title="Tümünü Göster"
                 android:checkable="true"
                 android:checked="true" />
             <item
                 android:id="@+id/filter_folders_only"
-                android:title="Folders Only"
+                android:title="Yalnızca Klasörler"
                 android:checkable="true" />
             <item
                 android:id="@+id/filter_files_only"
-                android:title="Files Only"
+                android:title="Yalnızca Dosyalar"
                 android:checkable="true" />
         </menu>
     </item>
 
     <item
         android:id="@+id/action_filter_by_extension"
-        android:title="Filter by Extension"
+        android:title="Uzantıya Göre Filtrele"
         app:showAsAction="never">
         <menu>
             <item
                 android:id="@+id/ext_all"
-                android:title="All Files"
+                android:title="Tüm Dosyalar"
                 android:checkable="true"
                 android:checked="true" />
             <item
                 android:id="@+id/ext_xml"
-                android:title="XML Files (.xml)"
+                android:title="XML Dosyaları (.xml)"
                 android:checkable="true" />
             <item
                 android:id="@+id/ext_txt"
-                android:title="Text Files (.txt)"
+                android:title="Metin Dosyaları (.txt)"
                 android:checkable="true" />
             <item
                 android:id="@+id/ext_pdf"
-                android:title="PDF Files (.pdf)"
+                android:title="PDF Dosyaları (.pdf)"
                 android:checkable="true" />
             <item
                 android:id="@+id/ext_image"
-                android:title="Images (.jpg, .png, .gif)"
+                android:title="Görseller (.jpg, .png, .gif)"
                 android:checkable="true" />
             <item
                 android:id="@+id/ext_video"
-                android:title="Videos (.mp4, .mkv, .avi)"
+                android:title="Videolar (.mp4, .mkv, .avi)"
                 android:checkable="true" />
             <item
                 android:id="@+id/ext_audio"
-                android:title="Audio (.mp3, .wav, .m4a)"
+                android:title="Ses Dosyaları (.mp3, .wav, .m4a)"
                 android:checkable="true" />
             <item
                 android:id="@+id/ext_apk"
-                android:title="APK Files (.apk)"
+                android:title="APK Dosyaları (.apk)"
                 android:checkable="true" />
             <item
                 android:id="@+id/ext_zip"
-                android:title="Archives (.zip, .rar, .7z)"
+                android:title="Arşivler (.zip, .rar, .7z)"
                 android:checkable="true" />
             <item
                 android:id="@+id/ext_custom"
-                android:title="Custom Extension..."
+                android:title="Özel Uzantı..."
                 android:checkable="true" />
         </menu>
     </item>
