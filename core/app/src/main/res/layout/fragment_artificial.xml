@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -65,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:text="Undo"
+        android:text="Geri Al"
         android:visibility="gone"
         app:icon="@drawable/ic_undo"
         style="@style/Widget.Material3.ExtendedFloatingActionButton.Primary" />
