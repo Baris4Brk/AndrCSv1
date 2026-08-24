@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.materialswitch.MaterialSwitch
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.textview.MaterialTextView
 import com.tom.rv2ide.R
 import com.tom.rv2ide.artificial.agents.AIAgentManager
@@ -37,7 +36,6 @@ class AIPreferencesFragment(
     private lateinit var currentModelText: MaterialTextView
     
     private val providerSwitchDialog by lazy { ProviderSwitchDialog(requireContext()) }
-    
     private var completionStateMonitorJob: Job? = null
     private var isCompletionEnabled = true
 
@@ -51,7 +49,6 @@ class AIPreferencesFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
         initializeViews(view)
         setupProviderDropdown()
         setupModelDropdown()
@@ -89,7 +86,7 @@ class AIPreferencesFragment(
             "claude" to "Anthropic Claude",
             "deepseek" to "DeepSeek",
             "grok" to "xAI Grok",
-            "localllm" to "Local LLM"
+            "localllm" to "Yerel LLM"
         )
         
         val allProviderIds = listOf("gemini", "openai", "claude", "deepseek", "grok", "localllm")
@@ -97,7 +94,6 @@ class AIPreferencesFragment(
         
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, providerNames)
         providerDropdown.setAdapter(adapter)
-        
         updateProviderDropdownSelection()
         
         providerDropdown.setOnItemClickListener { _, _, position, _ ->
@@ -113,7 +109,7 @@ class AIPreferencesFragment(
     }
     
     private fun showLocalLLMConfigDialog(providerName: String) {
-        val dialog = LocalLLMConfigDialog { baseUrl, modelName ->
+        val dialog = LocalLLMConfigDialog { _, _ ->
             handleProviderChange("localllm", providerName)
         }
         dialog.show(parentFragmentManager, "LocalLLMConfigDialog")
@@ -126,7 +122,7 @@ class AIPreferencesFragment(
             "claude" to "Anthropic Claude",
             "deepseek" to "DeepSeek",
             "grok" to "xAI Grok",
-            "localllm" to "Local LLM"
+            "localllm" to "Yerel LLM"
         )
         
         val currentProviderId = agents.getProvider()
@@ -146,7 +142,7 @@ class AIPreferencesFragment(
             "claude" -> "Anthropic Claude"
             "deepseek" -> "DeepSeek"
             "grok" -> "xAI Grok"
-            "localllm" -> "Local LLM"
+            "localllm" -> "Yerel LLM"
             else -> currentProvider.uppercase()
         }
         
@@ -156,14 +152,11 @@ class AIPreferencesFragment(
 
     private fun setupModelDropdown() {
         updateModelDropdown()
-        
         modelDropdown.setOnItemClickListener { _, _, position, _ ->
             val currentProvider = agents.getProvider()
             val models = agents.getModelsForProvider(currentProvider)
-            
             if (position < models.size) {
-                val selectedModel = models[position]
-                handleModelChange(selectedModel)
+                handleModelChange(models[position])
             }
         }
     }
@@ -171,7 +164,6 @@ class AIPreferencesFragment(
     private fun updateModelDropdown() {
         val currentProvider = agents.getProvider()
         val models = agents.getModelsForProvider(currentProvider)
-        
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, models.toList())
         modelDropdown.setAdapter(adapter)
         
@@ -187,11 +179,7 @@ class AIPreferencesFragment(
         autoSwitchToggle.isChecked = providerSwitchDialog.isAutoSwitchEnabled()
         autoSwitchToggle.setOnCheckedChangeListener { _, isChecked ->
             providerSwitchDialog.setAutoSwitch(isChecked)
-            val message = if (isChecked) {
-                "Auto-switch enabled"
-            } else {
-                "Auto-switch disabled"
-            }
+            val message = if (isChecked) "Otomatik geçiş etkinleştirildi" else "Otomatik geçiş devre dışı bırakıldı"
             showSnackbar(message)
         }
         
@@ -199,48 +187,32 @@ class AIPreferencesFragment(
             .getBoolean("code_completion_enabled", true)
         isCompletionEnabled = savedState
         codeCompletionToggle.isChecked = savedState
-        
         codeCompletionToggle.setOnCheckedChangeListener { _, isChecked ->
             android.util.Log.d("AIPreferences", "Toggle changed to: $isChecked")
-            
             isCompletionEnabled = isChecked
-            
             requireContext().getSharedPreferences("ai_preferences", Context.MODE_PRIVATE)
                 .edit()
                 .putBoolean("code_completion_enabled", isChecked)
                 .apply()
-            
-            lifecycleScope.launch {
-                applyCompletionStateChange(isChecked)
-            }
-            
-            val message = if (isChecked) {
-                "✅ Code completion enabled"
-            } else {
-                "❌ Code completion disabled"
-            }
+            lifecycleScope.launch { applyCompletionStateChange(isChecked) }
+            val message = if (isChecked) "✅ Kod tamamlama etkinleştirildi" else "❌ Kod tamamlama devre dışı bırakıldı"
             showSnackbar(message)
         }
     }
     
     private fun startCompletionStateMonitoring() {
         stopCompletionStateMonitoring()
-        
         completionStateMonitorJob = lifecycleScope.launch {
             while (true) {
                 delay(100)
-                
                 val savedState = requireContext().getSharedPreferences("ai_preferences", Context.MODE_PRIVATE)
                     .getBoolean("code_completion_enabled", true)
-                
                 if (savedState != isCompletionEnabled) {
                     android.util.Log.d("AIPreferences", "State mismatch detected: saved=$savedState, current=$isCompletionEnabled")
                     isCompletionEnabled = savedState
-                    
                     if (codeCompletionToggle.isChecked != savedState) {
                         codeCompletionToggle.isChecked = savedState
                     }
-                    
                     applyCompletionStateChange(savedState)
                 }
             }
@@ -254,7 +226,6 @@ class AIPreferencesFragment(
     
     private suspend fun applyCompletionStateChange(enabled: Boolean) {
         android.util.Log.d("AIPreferences", "Applying completion state change: $enabled")
-        
         if (enabled) {
             codeCompletionManager?.reattachToCurrentEditor()
             android.util.Log.d("AIPreferences", "Re-enabled code completion")
@@ -267,16 +238,13 @@ class AIPreferencesFragment(
     private fun syncCodeCompletionToggle() {
         val savedState = requireContext().getSharedPreferences("ai_preferences", Context.MODE_PRIVATE)
             .getBoolean("code_completion_enabled", true)
-        
         android.util.Log.d("AIPreferences", "Syncing toggle: saved=$savedState")
-        
         isCompletionEnabled = savedState
         codeCompletionToggle.isChecked = savedState
     }
 
     private fun handleProviderChange(providerId: String, providerName: String) {
         android.util.Log.d("AIPreferences", "Switching to provider: $providerId")
-        
         val availableModels = agents.getModelsForProvider(providerId)
         android.util.Log.d("AIPreferences", "Available models for $providerId: ${availableModels.joinToString()}")
         
@@ -287,13 +255,11 @@ class AIPreferencesFragment(
         }
         
         agents.setProvider(providerId)
-        
         updateModelDropdown()
         
         if (aiAgent.setProvider(providerId)) {
             aiAgent.reinitializeWithSelectedModel()
             updateCurrentStatus()
-            
             lifecycleScope.launch {
                 if (isCompletionEnabled) {
                     delay(500)
@@ -301,10 +267,9 @@ class AIPreferencesFragment(
                     android.util.Log.d("AIPreferences", "Reattached completion after provider change")
                 }
             }
-            
-            showSnackbar("Switched to $providerName")
+            showSnackbar("$providerName sağlayıcısına geçildi")
         } else {
-            showSnackbar("⚠️ No valid API key for $providerName")
+            showSnackbar("⚠️ $providerName için geçerli API anahtarı bulunamadı")
         }
     }
 
@@ -313,7 +278,6 @@ class AIPreferencesFragment(
         agents.setAgent(modelName)
         aiAgent.reinitializeWithSelectedModel()
         updateCurrentStatus()
-        
         lifecycleScope.launch {
             if (isCompletionEnabled) {
                 delay(500)
@@ -321,14 +285,11 @@ class AIPreferencesFragment(
                 android.util.Log.d("AIPreferences", "Reattached completion after model change")
             }
         }
-        
-        showSnackbar("Model switched to: $modelName")
+        showSnackbar("Model değiştirildi: $modelName")
     }
 
     private fun showSnackbar(message: String) {
-        view?.let {
-            Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show()
-        }
+        view?.let { Snackbar.make(it, message, Snackbar.LENGTH_SHORT).show() }
     }
     
     override fun onDestroyView() {
