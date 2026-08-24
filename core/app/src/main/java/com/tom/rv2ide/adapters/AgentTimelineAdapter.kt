@@ -1,11 +1,11 @@
 package com.tom.rv2ide.adapters
 
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.color.MaterialColors
 import com.google.android.material.textview.MaterialTextView
 import com.tom.rv2ide.R
 
@@ -46,17 +46,33 @@ class AgentTimelineAdapter : RecyclerView.Adapter<AgentTimelineAdapter.ViewHolde
     holder.title.text = event.title
     holder.detail.text = event.detail
 
-    // R.color.primary, ?attr/colorPrimary referanslı bir kaynak olduğu için
-    // ContextCompat.getColor() ile doğrudan okunmamalıdır. Material temasındaki
-    // colorPrimary attribute'u MaterialColors üzerinden çözüyoruz. Böylece
-    // Android 15'te Resources$NotFoundException oluşması engellenir.
+    // R.color.primary, ?attr/colorPrimary referanslı olduğu için ContextCompat.getColor()
+    // doğrudan kullanıldığında Android 15'te Resources$NotFoundException oluşabiliyor.
+    // Burada temadaki colorPrimary attribute'unu TypedValue ile çözüyoruz. Bu yaklaşım
+    // ek bir MaterialColors API'sine ihtiyaç duymaz ve mevcut Gradle/Material bağımlılıklarını
+    // değiştirmeden derlenir.
     val color =
         when (event.kind) {
-          Kind.USER ->
-              MaterialColors.getColor(
-                  holder.card,
-                  com.google.android.material.R.attr.colorPrimary,
-              )
+          Kind.USER -> {
+            val value = TypedValue()
+            val resolved =
+                holder.card.context.theme.resolveAttribute(
+                    com.google.android.material.R.attr.colorPrimary,
+                    value,
+                    true,
+                )
+            if (resolved) {
+              if (value.resourceId != 0) {
+                ContextCompat.getColor(holder.card.context, value.resourceId)
+              } else {
+                value.data
+              }
+            } else {
+              // Tema colorPrimary sağlamıyorsa timeline'ın çalışmaya devam etmesi için
+              // mevcut sabit bir rengi güvenli geri dönüş olarak kullanıyoruz.
+              ContextCompat.getColor(holder.card.context, R.color.change_added)
+            }
+          }
           Kind.PLAN -> ContextCompat.getColor(holder.card.context, R.color.change_modified)
           Kind.TOOL -> ContextCompat.getColor(holder.card.context, R.color.change_added)
           Kind.RESULT -> ContextCompat.getColor(holder.card.context, R.color.success)
