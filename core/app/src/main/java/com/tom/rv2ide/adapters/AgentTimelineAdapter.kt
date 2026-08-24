@@ -48,16 +48,16 @@ class AgentTimelineAdapter : RecyclerView.Adapter<AgentTimelineAdapter.ViewHolde
 
     // R.color.primary, ?attr/colorPrimary referanslı olduğu için ContextCompat.getColor()
     // doğrudan kullanıldığında Android 15'te Resources$NotFoundException oluşabiliyor.
-    // Burada temadaki colorPrimary attribute'unu TypedValue ile çözüyoruz. Bu yaklaşım
-    // ek bir MaterialColors API'sine ihtiyaç duymaz ve mevcut Gradle/Material bağımlılıklarını
-    // değiştirmeden derlenir.
+    // colorPrimary uygulamanın AppCompat temasından çözülür. Burada Material R.attr yerine
+    // AppCompat R.attr kullanıyoruz; çünkü colorPrimary AppCompat tema attribute'udur ve
+    // Material 1.13 ile derleme sırasında transitive R erişimine bağlı kalmamış olur.
     val color =
         when (event.kind) {
           Kind.USER -> {
             val value = TypedValue()
             val resolved =
                 holder.card.context.theme.resolveAttribute(
-                    com.google.android.material.R.attr.colorPrimary,
+                    androidx.appcompat.R.attr.colorPrimary,
                     value,
                     true,
                 )
