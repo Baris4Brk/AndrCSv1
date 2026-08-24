@@ -197,7 +197,7 @@ class ChatFragment : Fragment() {
             val userRequest = promptInput.text.toString()
             
             if (userRequest.isBlank()) {
-                showSnackbar("Please enter a request")
+                showSnackbar("Lütfen bir istek girin")
                 return@setOnClickListener
             }
             
@@ -271,12 +271,12 @@ class ChatFragment : Fragment() {
                 val success = aiAgent.setProjectRoot(userRootProject)
                 
                 if (success) {
-                    statusText.text = "Project loaded successfully"
+                    statusText.text = "Proje başarıyla yüklendi"
                 } else {
-                    statusText.text = "Failed to load project"
+                    statusText.text = "Proje yüklenemedi"
                 }
             } catch (e: Exception) {
-                statusText.text = "Error loading project: ${e.message}"
+                statusText.text = "Proje yüklenirken hata: ${e.message}"
             }
         }
     }
@@ -364,7 +364,7 @@ class ChatFragment : Fragment() {
 
     private fun openFileInEditor(fileName: String) {
         if (userRootProject.isBlank()) {
-            showSnackbar("Project path not set")
+            showSnackbar("Proje yolu ayarlanmadı")
             return
         }
         
@@ -372,21 +372,21 @@ class ChatFragment : Fragment() {
             try {
                 val file = findFileInProject(File(userRootProject), fileName)
                 if (file == null) {
-                    showSnackbar("File not found: $fileName")
+                    showSnackbar("Dosya bulunamadı: $fileName")
                     return@launch
                 }
                 
                 val activity = requireActivity()
                 if (activity is EditorHandlerActivity) {
                     activity.openFile(file)
-                    showSnackbar("Opened: ${file.name}")
+                    showSnackbar("Açıldı: ${file.name}")
                     
                     lastMonitoredFile = file
                     delay(500)
                     setupCodeCompletionForCurrentFile()
                 }
             } catch (e: Exception) {
-                showSnackbar("Error opening file: ${e.message}")
+                showSnackbar("Dosya açılırken hata: ${e.message}")
             }
         }
     }
@@ -435,14 +435,14 @@ class ChatFragment : Fragment() {
                 aiAgent.clearConversation()
                 
                 promptInput.text?.clear()
-                statusText.text = "Conversation cleared. Ready for new request."
+                statusText.text = "Sohbet temizlendi. Yeni isteğe hazırım."
                 fileModificationList.visibility = View.GONE
                 summaryCard.visibility = View.GONE
                 fileModificationAdapter.clear()
                 
-                showSnackbar("Conversation cleared")
+                showSnackbar("Sohbet temizlendi")
             } catch (e: Exception) {
-                showSnackbar("Error clearing: ${e.message}")
+                showSnackbar("Temizleme hatası: ${e.message}")
             }
         }
     }
