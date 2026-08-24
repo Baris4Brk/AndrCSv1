@@ -96,7 +96,7 @@ private class AIAgentEnabled(
   override fun onCreatePreference(context: Context): Preference {
     return super.onCreatePreference(context).apply {
       key = "ai_agent_enabled"
-      title = "Yapay Zekâ Agent'ını Etkinleştir"
+      title = "Yapay Zekâ Ajanını Etkinleştir"
       summary = "Yapay zekâ destekli kod üretimini etkinleştir"
     }
   }
