@@ -60,7 +60,7 @@ class AIRequestHandler(
                 withContext(Dispatchers.Main) {
                     executeBtn.isEnabled = true
                     progressIndicator.visibility = View.GONE
-                    statusText.text = "❌ Hata: ${e.message}"
+                    statusText.text = "❌ Hata: ${translateAiText(e.message ?: "Bilinmeyen hata")}" 
                 }
             }
         }
@@ -70,8 +70,9 @@ class AIRequestHandler(
         aiAgent.executeRequest(userRequest, object : AIAgentManager.AIAgentCallback {
             override fun onProcessing(message: String) {
                 lifecycleScope.launch(Dispatchers.Main) {
-                    statusText.text = message
-                    appendTimeline(AgentTimelineAdapter.Kind.PLAN, "Ajan", message)
+                    val translated = translateAiText(message)
+                    statusText.text = translated
+                    appendTimeline(AgentTimelineAdapter.Kind.PLAN, "Ajan", translated)
                 }
             }
 
@@ -131,7 +132,7 @@ class AIRequestHandler(
 
             override fun onRetry(attemptNumber: Int, message: String) {
                 lifecycleScope.launch(Dispatchers.Main) {
-                    statusText.text = "🔄 Yeniden deneniyor #$attemptNumber: $message"
+                    statusText.text = "🔄 Yeniden deneniyor #$attemptNumber: ${translateAiText(message)}"
                 }
             }
         })
@@ -176,14 +177,15 @@ class AIRequestHandler(
         progressIndicator.visibility = View.GONE
         executeBtn.isEnabled = true
         
+        val translated = translateAiText(message)
         statusText.text = """
 ❌ HATA OLUŞTU
 
-$message
+$translated
 
 Hata mesajını kontrol edip tekrar deneyin.
         """.trimIndent()
-        appendTimeline(AgentTimelineAdapter.Kind.ERROR, "Ajan hatası", message)
+        appendTimeline(AgentTimelineAdapter.Kind.ERROR, "Ajan hatası", translated)
     }
     
     private fun buildSummaryText(summary: AIAgentManager.ModificationSummary): String {
@@ -206,6 +208,59 @@ Hata mesajını kontrol edip tekrar deneyin.
         return builder.toString()
     }
     
+    /**
+     * AI tarafındaki kullanıcıya görünen İngilizce durum ve hata metinlerini
+     * burada Türkçeleştirir. Sağlayıcı adları, model adları ve API hata detayları
+     * aynen korunur; yalnızca arayüz metinleri çevrilir.
+     */
+    private fun translateAiText(text: String): String {
+        return text
+            .replace("Analyzing your request...", "İsteğiniz analiz ediliyor...")
+            .replace("Thinking differently...", "Farklı bir şekilde düşünüyor...")
+            .replace("Modifying files...", "Dosyalar değiştiriliyor...")
+            .replace("Some files failed. Retrying...", "Bazı dosyalar değiştirilemedi. Yeniden deneniyor...")
+            .replace("No files were modified. Retrying...", "Hiçbir dosya değiştirilemedi. Yeniden deneniyor...")
+            .replace("Failed after ", "Şu kadar denemeden sonra başarısız oldu: ")
+            .replace(" attempts with ", " deneme. Ajan: ")
+            .replace("No agent initialized", "Ajan başlatılmadı")
+            .replace("Please check your API key and try again.", "Lütfen API anahtarınızı kontrol edip tekrar deneyin.")
+            .replace("Error: ", "Hata: ")
+            .replace(". Retrying...", ". Yeniden deneniyor...")
+            .replace("Exception: ", "İstisna: ")
+            .replace(". Trying again...", ". Tekrar deneniyor...")
+            .replace("Auto-switching to another provider...", "Başka bir sağlayıcıya otomatik geçiliyor...")
+            .replace("Switched to ", "Şuna geçildi: ")
+            .replace("Failed to switch providers.", "Sağlayıcı değiştirilemedi.")
+            .replace("No alternative providers available.", "Kullanılabilir alternatif sağlayıcı yok.")
+            .replace("Modified successfully", "Başarıyla değiştirildi")
+            .replace("RATE LIMIT EXCEEDED", "İSTEK SINIRI AŞILDI")
+            .replace("The API rate limit has been exceeded.", "API istek sınırı aşıldı.")
+            .replace("Please wait a few minutes before trying again.", "Lütfen tekrar denemeden önce birkaç dakika bekleyin.")
+            .replace("QUOTA EXCEEDED", "KOTA AŞILDI")
+            .replace("Your API quota has been exhausted.", "API kotanız tükendi.")
+            .replace("Please check your billing or upgrade your plan.", "Lütfen faturalandırma bilgilerinizi kontrol edin veya planınızı yükseltin.")
+            .replace("INSUFFICIENT BALANCE", "YETERSİZ BAKİYE")
+            .replace("Your account balance is too low to process this request.", "Hesap bakiyeniz bu isteği işlemek için yetersiz.")
+            .replace("Please add credits or upgrade your plan.", "Lütfen kredi ekleyin veya planınızı yükseltin.")
+            .replace("INVALID API KEY", "GEÇERSİZ API ANAHTARI")
+            .replace("The API key is invalid or expired.", "API anahtarı geçersiz veya süresi dolmuş.")
+            .replace("Please update your API key in the configuration.", "Lütfen yapılandırmadaki API anahtarınızı güncelleyin.")
+            .replace("NETWORK ERROR", "AĞ HATASI")
+            .replace("Could not connect to the API server.", "API sunucusuna bağlanılamadı.")
+            .replace("Please check your internet connection.", "Lütfen internet bağlantınızı kontrol edin.")
+            .replace("TIMEOUT ERROR", "ZAMAN AŞIMI HATASI")
+            .replace("The request took too long to complete.", "İsteğin tamamlanması çok uzun sürdü.")
+            .replace("JSON PARSING ERROR", "JSON AYRIŞTIRMA HATASI")
+            .replace("Failed to parse API response.", "API yanıtı ayrıştırılamadı.")
+            .replace("The API may be experiencing issues.", "API tarafında bir sorun olabilir.")
+            .replace("ERROR OCCURRED", "HATA OLUŞTU")
+            .replace("Error Type:", "Hata türü:")
+            .replace("Message:", "Mesaj:")
+            .replace("Provider:", "Sağlayıcı:")
+            .replace("Details:", "Ayrıntılar:")
+            .replace("Stack Trace (first 500 chars):", "Yığın izi (ilk 500 karakter):")
+    }
+
     fun cancel() {
         executionJob?.cancel()
     }
