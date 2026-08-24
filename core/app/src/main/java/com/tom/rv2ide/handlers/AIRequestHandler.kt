@@ -49,7 +49,7 @@ class AIRequestHandler(
                     agentTimelineAdapter.clear()
                     appendTimeline(
                         AgentTimelineAdapter.Kind.USER,
-                        "Request",
+                        "İstek",
                         userRequest
                     )
                 }
@@ -60,7 +60,7 @@ class AIRequestHandler(
                 withContext(Dispatchers.Main) {
                     executeBtn.isEnabled = true
                     progressIndicator.visibility = View.GONE
-                    statusText.text = "❌ Error: ${e.message}"
+                    statusText.text = "❌ Hata: ${e.message}"
                 }
             }
         }
@@ -71,7 +71,7 @@ class AIRequestHandler(
             override fun onProcessing(message: String) {
                 lifecycleScope.launch(Dispatchers.Main) {
                     statusText.text = message
-                    appendTimeline(AgentTimelineAdapter.Kind.PLAN, "Agent", message)
+                    appendTimeline(AgentTimelineAdapter.Kind.PLAN, "Ajan", message)
                 }
             }
 
@@ -83,8 +83,8 @@ class AIRequestHandler(
                     fileModificationAdapter.addItem(fileName)
                     appendTimeline(
                         AgentTimelineAdapter.Kind.TOOL,
-                        "write_file",
-                        "Preparing $fileName for approval and application"
+                        "Dosya yazma",
+                        "$fileName dosyası onaylanıp uygulanmak üzere hazırlanıyor"
                     )
                 }
             }
@@ -98,8 +98,8 @@ class AIRequestHandler(
                     }
                     appendTimeline(
                         if (success) AgentTimelineAdapter.Kind.RESULT else AgentTimelineAdapter.Kind.ERROR,
-                        if (success) "Tool completed" else "Tool failed",
-                        if (success) "Updated $fileName" else "Could not update $fileName"
+                        if (success) "İşlem tamamlandı" else "İşlem başarısız",
+                        if (success) "$fileName güncellendi" else "$fileName güncellenemedi"
                     )
                 }
             }
@@ -131,7 +131,7 @@ class AIRequestHandler(
 
             override fun onRetry(attemptNumber: Int, message: String) {
                 lifecycleScope.launch(Dispatchers.Main) {
-                    statusText.text = "🔄 Retry #$attemptNumber: $message"
+                    statusText.text = "🔄 Yeniden deneniyor #$attemptNumber: $message"
                 }
             }
         })
@@ -143,11 +143,11 @@ class AIRequestHandler(
         summary: AIAgentManager.ModificationSummary
     ) {
         progressIndicator.visibility = View.GONE
-        statusText.text = "✅ Operation completed"
+        statusText.text = "✅ İşlem tamamlandı"
         appendTimeline(
             AgentTimelineAdapter.Kind.RESULT,
-            "Request completed",
-            "${summary.successfulFiles} file(s) updated"
+            "İstek tamamlandı",
+            "${summary.successfulFiles} dosya güncellendi"
         )
         summaryText.text = buildSummaryText(summary)
         summaryCard.visibility = View.VISIBLE
@@ -167,7 +167,7 @@ class AIRequestHandler(
         progressIndicator.visibility = View.GONE
         executeBtn.isEnabled = true
         statusText.text = response
-        appendTimeline(AgentTimelineAdapter.Kind.RESULT, "Response", response)
+        appendTimeline(AgentTimelineAdapter.Kind.RESULT, "Yanıt", response)
         summaryCard.visibility = View.GONE
         fileModificationList.visibility = View.GONE
     }
@@ -177,29 +177,29 @@ class AIRequestHandler(
         executeBtn.isEnabled = true
         
         statusText.text = """
-❌ ERROR OCCURRED
+❌ HATA OLUŞTU
 
 $message
 
-Please check the error message and try again.
+Hata mesajını kontrol edip tekrar deneyin.
         """.trimIndent()
-        appendTimeline(AgentTimelineAdapter.Kind.ERROR, "Agent error", message)
+        appendTimeline(AgentTimelineAdapter.Kind.ERROR, "Ajan hatası", message)
     }
     
     private fun buildSummaryText(summary: AIAgentManager.ModificationSummary): String {
         val builder = StringBuilder()
-        builder.append("📊 Total Files: ${summary.totalFiles}\n")
-        builder.append("✅ Successful: ${summary.successfulFiles}\n")
+        builder.append("📊 Toplam dosya: ${summary.totalFiles}\n")
+        builder.append("✅ Başarılı: ${summary.successfulFiles}\n")
         if (summary.failedFiles > 0) {
-            builder.append("❌ Failed: ${summary.failedFiles}\n")
+            builder.append("❌ Başarısız: ${summary.failedFiles}\n")
         }
-        builder.append("🆕 New Files: ${summary.newFiles}\n")
-        builder.append("✏️ Modified Files: ${summary.modifiedFiles}\n\n")
+        builder.append("🆕 Yeni dosya: ${summary.newFiles}\n")
+        builder.append("✏️ Değiştirilen dosya: ${summary.modifiedFiles}\n\n")
         
-        builder.append("Files:\n")
+        builder.append("Dosyalar:\n")
         summary.fileDetails.forEach { detail ->
             val icon = if (detail.status == AIAgentManager.FileStatus.SUCCESS) "✅" else "❌"
-            val type = if (detail.changeType == AIAgentManager.ChangeType.CREATED) "Created" else "Modified"
+            val type = if (detail.changeType == AIAgentManager.ChangeType.CREATED) "Oluşturuldu" else "Değiştirildi"
             builder.append("$icon $type: ${detail.fileName}\n")
         }
         
