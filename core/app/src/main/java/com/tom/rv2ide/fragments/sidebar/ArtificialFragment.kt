@@ -81,7 +81,6 @@ class ArtificialFragment(
         contentContainer = view.findViewById(R.id.contentContainer)
     
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressedCallback)
-    
         setupNavigationRail()
         setupFab()
         
@@ -106,8 +105,8 @@ class ArtificialFragment(
     
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "Chat"
-                1 -> "History"
+                0 -> "Sohbet"
+                1 -> "Geçmiş"
                 else -> ""
             }
         }.attach()
@@ -121,34 +120,22 @@ class ArtificialFragment(
             }
         })
         
-        viewPager.post {
-            viewPager.requestLayout()
-        }
+        viewPager.post { viewPager.requestLayout() }
     }
         
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        if (::viewPager.isInitialized) {
-            outState.putInt(KEY_VIEWPAGER_POSITION, viewPager.currentItem)
-        }
-        if (::contentContainer.isInitialized) {
-            outState.putInt(KEY_CONTENT_VISIBILITY, contentContainer.visibility)
-        }
+        if (::viewPager.isInitialized) outState.putInt(KEY_VIEWPAGER_POSITION, viewPager.currentItem)
+        if (::contentContainer.isInitialized) outState.putInt(KEY_CONTENT_VISIBILITY, contentContainer.visibility)
     }
 
     private fun setupNavigationRail() {
-        navigationRailManager = NavigationRailManager(
-            navigationRail,
-            overlayView,
-            fabToggleRail
-        )
+        navigationRailManager = NavigationRailManager(navigationRail, overlayView, fabToggleRail)
         
         navigationRail.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_chat -> {
-                    if (contentContainer.visibility == View.VISIBLE) {
-                        showMainContent()
-                    }
+                    if (contentContainer.visibility == View.VISIBLE) showMainContent()
                     viewPager.currentItem = 0
                     navigationRailManager.collapse()
                     true
@@ -162,7 +149,7 @@ class ArtificialFragment(
             }
         }
     }
-    
+
     private fun getCurrentChatFragment(): ChatFragment? {
         val fragments = childFragmentManager.fragments
         return fragments.find { it is ChatFragment && it.isVisible } as? ChatFragment
@@ -171,20 +158,13 @@ class ArtificialFragment(
     private fun openAIPreferences() {
         val chatFragment = getCurrentChatFragment()
         val completionManager = chatFragment?.getCodeCompletionManager()
-        
-        val preferencesFragment = AIPreferencesFragment(
-            aiAgent,
-            agents,
-            completionManager
-        )
+        val preferencesFragment = AIPreferencesFragment(aiAgent, agents, completionManager)
         
         val slideIn = AnimationUtils.loadAnimation(requireContext(), android.R.anim.slide_in_left)
         val slideOut = AnimationUtils.loadAnimation(requireContext(), android.R.anim.slide_out_right)
-        
         viewPager.startAnimation(slideOut)
         viewPager.visibility = View.GONE
         tabLayout.visibility = View.GONE
-        
         contentContainer.visibility = View.VISIBLE
         contentContainer.startAnimation(slideIn)
         backPressedCallback.isEnabled = true
@@ -198,33 +178,23 @@ class ArtificialFragment(
     private fun showMainContent() {
         val slideIn = AnimationUtils.loadAnimation(requireContext(), android.R.anim.slide_in_left)
         val slideOut = AnimationUtils.loadAnimation(requireContext(), android.R.anim.slide_out_right)
-        
         contentContainer.startAnimation(slideOut)
         contentContainer.visibility = View.GONE
-        
         viewPager.visibility = View.VISIBLE
         tabLayout.visibility = View.VISIBLE
         viewPager.startAnimation(slideIn)
-        
         backPressedCallback.isEnabled = false
-        
-        if (childFragmentManager.backStackEntryCount > 0) {
-            childFragmentManager.popBackStack()
-        }
+        if (childFragmentManager.backStackEntryCount > 0) childFragmentManager.popBackStack()
     }
 
     private fun setupFab() {
         undoFab.setOnClickListener {
             val success = aiAgent.undoLastModification()
             if (success) {
-                view?.let {
-                    Snackbar.make(it, "Last modification undone", Snackbar.LENGTH_SHORT).show()
-                }
+                view?.let { Snackbar.make(it, "Son değişiklik geri alındı", Snackbar.LENGTH_SHORT).show() }
                 undoFab.visibility = View.GONE
             } else {
-                view?.let {
-                    Snackbar.make(it, "Nothing to undo", Snackbar.LENGTH_SHORT).show()
-                }
+                view?.let { Snackbar.make(it, "Geri alınacak değişiklik yok", Snackbar.LENGTH_SHORT).show() }
             }
         }
     }
