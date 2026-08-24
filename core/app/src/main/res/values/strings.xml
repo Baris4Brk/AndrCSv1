@@ -1,26 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-  ~ This file is part of AndroidIDE.
-  ~
-  ~ AndroidIDE is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU General Public License as published by
-  ~ the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ AndroidIDE is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU General Public License
-  ~ along with AndroidIDE.  If not, see <https://www.gnu.org/licenses/>.
-  -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <!--  Required by F-Droid-->
-  <!-- <string name="app_name" translatable="false">AndroidIDE</string> -->
+  <!-- F-Droid tarafından gerekli. Uygulamanın teknik adını değiştirmiyoruz. -->
   <string name="app_name" translatable="false">AndrCS</string>
 
-  <!-- Asset Studio -->
+  <!-- Varlık Stüdyosu -->
   <string name="asset_studio_title">Varlık Stüdyosu</string>
   <string name="asset_studio_subtitle">Çizim ve Simge Oluşturucu</string>
   <string name="asset_studio_launch">Stüdyoyu Aç</string>
@@ -32,7 +15,7 @@
   <string name="asset_studio_default_path">res/drawable</string>
   <string name="asset_studio_launch_description">Varlık Stüdyosu arayüzünü aç</string>
 
-  <!-- Sub-Module Maker -->
+  <!-- Alt Modül Oluşturucu -->
   <string name="sub_module_maker_title">Alt Modül Oluşturucu</string>
   <string name="sub_module_maker_subtitle">Projeniz için yeni alt modüller oluşturun</string>
   <string name="sub_module_configuration">Modül Yapılandırması</string>
@@ -47,6 +30,32 @@
   <string name="sub_module_created_error">Modül oluşturulamadı: %1$s</string>
   <string name="sub_module_info_title">Alt Modüller Hakkında</string>
   <string name="sub_module_info_description">Alt modüller, projenizi daha küçük ve yönetilebilir bileşenlere ayırmanıza yardımcı olur. Her modülün kendi bağımlılıkları ve derleme yapılandırması olabilir.</string>
+
+  <!-- Yapay Zekâ / Agent -->
+  <string name="ai_agent_title">Yapay Zekâ Agent</string>
+  <string name="ai_agent_note">Agent, projenizdeki dosyaları analiz ederek gerekli değişiklikleri gerçekleştirebilir. Yapacağı işlemleri göndermeden önce kontrol edin.</string>
+  <string name="ai_agent_ask_hint">Yapay zekâya bir şey sorun...</string>
+  <string name="ai_agent_send">Gönder</string>
+  <string name="ai_agent_clear">Temizle</string>
+  <string name="ai_agent_status">Durum</string>
+  <string name="ai_agent_error">Agent hatası</string>
+  <string name="ai_agent_history">Geçmiş</string>
+  <string name="ai_agent_workspace">Çalışma Alanı</string>
+  <string name="ai_agent_project_scope">Proje kapsamı</string>
+  <string name="ai_agent_chat">Sohbet</string>
+  <string name="ai_agent_settings">Ayarlar</string>
+  <string name="ai_agent_select">Agent seçin</string>
+  <string name="ai_agent_ready">Agent hazır</string>
+  <string name="ai_agent_working">Agent çalışıyor...</string>
+  <string name="ai_agent_success">İşlem başarıyla tamamlandı</string>
+  <string name="ai_agent_failed">İşlem başarısız oldu</string>
+
+  <!-- AI geçmişi -->
+  <string name="ai_history_modified">Değiştirildi</string>
+  <string name="ai_history_failed_modify">Değiştirilemedi</string>
+  <string name="ai_history_attempt">Deneme #%1$d</string>
+  <string name="ai_history_success">Başarılı</string>
+  <string name="ai_history_failed">Başarısız</string>
 
   <!-- Terminal -->
   <string name="title_terminal">Terminal</string>
