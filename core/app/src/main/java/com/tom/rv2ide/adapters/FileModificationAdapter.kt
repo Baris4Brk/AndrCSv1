@@ -41,19 +41,19 @@ class FileModificationAdapter : RecyclerView.Adapter<FileModificationAdapter.Vie
         val item = items[position]
         holder.fileName.text = item.fileName
         
-        // Add click listener
+        // Dosya satırına dokunulduğunda ilgili dosyayı editörde açıyoruz.
         holder.itemView.setOnClickListener {
             onItemClickListener?.invoke(item.fileName)
         }
         
         when (item.status) {
             Status.MODIFYING -> {
-                holder.fileStatus.text = "Modifying..."
+                holder.fileStatus.text = "Değiştiriliyor..."
                 holder.progressIndicator.visibility = View.VISIBLE
                 holder.statusIcon.visibility = View.GONE
             }
             Status.SUCCESS -> {
-                holder.fileStatus.text = "Modified successfully"
+                holder.fileStatus.text = "Başarıyla değiştirildi"
                 holder.progressIndicator.visibility = View.GONE
                 holder.statusIcon.visibility = View.VISIBLE
                 holder.statusIcon.setImageResource(android.R.drawable.ic_menu_save)
@@ -62,7 +62,7 @@ class FileModificationAdapter : RecyclerView.Adapter<FileModificationAdapter.Vie
                 )
             }
             Status.FAILED -> {
-                holder.fileStatus.text = "Failed to modify"
+                holder.fileStatus.text = "Değiştirilemedi"
                 holder.progressIndicator.visibility = View.GONE
                 holder.statusIcon.visibility = View.VISIBLE
                 holder.statusIcon.setImageResource(android.R.drawable.ic_delete)
