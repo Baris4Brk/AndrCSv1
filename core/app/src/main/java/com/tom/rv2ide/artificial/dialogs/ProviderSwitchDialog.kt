@@ -31,7 +31,6 @@ class ProviderSwitchDialog(private val context: Context) {
     private val sp: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     private val AUTO_SWITCH_KEY = "auto_switch_providers"
     
-    
     fun isAutoSwitchEnabled(): Boolean {
         return sp.getBoolean(AUTO_SWITCH_KEY, false)
     }
@@ -55,23 +54,23 @@ class ProviderSwitchDialog(private val context: Context) {
         val providerNames = availableProviders.map { it.second }.toTypedArray()
         
         MaterialAlertDialogBuilder(context)
-            .setTitle("⚠️ Provider Error")
+            .setTitle("⚠️ Sağlayıcı Hatası")
             .setMessage(
-                "Current Provider: $currentProvider\n\n" +
-                "Error: $errorMessage\n\n" +
-                "Available providers: ${availableProviders.size}\n\n" +
-                "Would you like to switch to another provider?"
+                "Mevcut sağlayıcı: $currentProvider\n\n" +
+                "Hata: $errorMessage\n\n" +
+                "Kullanılabilir sağlayıcı sayısı: ${availableProviders.size}\n\n" +
+                "Başka bir sağlayıcıya geçmek ister misiniz?"
             )
-            .setPositiveButton("Switch Manually") { dialog, _ ->
+            .setPositiveButton("Manuel Geçiş") { dialog, _ ->
                 dialog.dismiss()
                 showProviderSelectionDialog(availableProviders, onProviderSelected)
             }
-            .setNegativeButton("Enable Auto-Switch") { dialog, _ ->
+            .setNegativeButton("Otomatik Geçişi Etkinleştir") { dialog, _ ->
                 setAutoSwitch(true)
                 onEnableAutoSwitch()
                 dialog.dismiss()
             }
-            .setNeutralButton("Cancel") { dialog, _ ->
+            .setNeutralButton("İptal") { dialog, _ ->
                 dialog.dismiss()
             }
             .setCancelable(false)
@@ -86,12 +85,12 @@ class ProviderSwitchDialog(private val context: Context) {
         val providerIds = availableProviders.map { it.first }
         
         MaterialAlertDialogBuilder(context)
-            .setTitle("Select Provider")
+            .setTitle("Sağlayıcı Seç")
             .setItems(providerNames) { dialog, which ->
                 onProviderSelected(providerIds[which])
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton("İptal") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -99,16 +98,16 @@ class ProviderSwitchDialog(private val context: Context) {
     
     private fun showNoProvidersAvailableDialog(errorMessage: String) {
         MaterialAlertDialogBuilder(context)
-            .setTitle("❌ No Providers Available")
+            .setTitle("❌ Kullanılabilir Sağlayıcı Yok")
             .setMessage(
-                "Error: $errorMessage\n\n" +
-                "Unfortunately, there are no other providers available with valid API keys.\n\n" +
-                "Please:\n" +
-                "1. Check your API keys\n" +
-                "2. Verify account quotas\n" +
-                "3. Try again later"
+                "Hata: $errorMessage\n\n" +
+                "Geçerli API anahtarına sahip başka kullanılabilir sağlayıcı yok.\n\n" +
+                "Lütfen:\n" +
+                "1. API anahtarlarınızı kontrol edin\n" +
+                "2. Hesap kotalarınızı kontrol edin\n" +
+                "3. Daha sonra tekrar deneyin"
             )
-            .setPositiveButton("OK") { dialog, _ ->
+            .setPositiveButton("Tamam") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -120,17 +119,17 @@ class ProviderSwitchDialog(private val context: Context) {
         reason: String
     ): MaterialAlertDialogBuilder {
         return MaterialAlertDialogBuilder(context)
-            .setTitle("🔄 Auto-Switched Provider")
+            .setTitle("🔄 Sağlayıcı Otomatik Değiştirildi")
             .setMessage(
-                "Switched from: $fromProvider\n" +
-                "Switched to: $toProvider\n\n" +
-                "Reason: $reason\n\n" +
-                "Auto-switch is enabled. You can disable it in settings."
+                "Önceki sağlayıcı: $fromProvider\n" +
+                "Yeni sağlayıcı: $toProvider\n\n" +
+                "Neden: $reason\n\n" +
+                "Otomatik geçiş etkin. Bunu ayarlardan devre dışı bırakabilirsiniz."
             )
-            .setPositiveButton("OK") { dialog, _ ->
+            .setPositiveButton("Tamam") { dialog, _ ->
                 dialog.dismiss()
             }
-            .setNegativeButton("Disable Auto-Switch") { dialog, _ ->
+            .setNegativeButton("Otomatik Geçişi Devre Dışı Bırak") { dialog, _ ->
                 setAutoSwitch(false)
                 dialog.dismiss()
             }
