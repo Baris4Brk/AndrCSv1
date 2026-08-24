@@ -33,6 +33,7 @@
 
   <!-- Yapay Zekâ / Agent -->
   <string name="ai_agent_title">Yapay Zekâ Agent</string>
+  <string name="ai_agent_description">Yapay Zekâ Agent kullanarak yapay zekâ destekli kod üretimi</string>
   <string name="ai_agent_note">Agent, projenizdeki dosyaları analiz ederek gerekli değişiklikleri gerçekleştirebilir. Yapacağı işlemleri göndermeden önce kontrol edin.</string>
   <string name="ai_agent_ask_hint">Yapay zekâya bir şey sorun...</string>
   <string name="ai_agent_send">Gönder</string>
