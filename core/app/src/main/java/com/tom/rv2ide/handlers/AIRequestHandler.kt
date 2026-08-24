@@ -259,6 +259,23 @@ Hata mesajını kontrol edip tekrar deneyin.
             .replace("Provider:", "Sağlayıcı:")
             .replace("Details:", "Ayrıntılar:")
             .replace("Stack Trace (first 500 chars):", "Yığın izi (ilk 500 karakter):")
+            // Sağlayıcıların kendi servis/hata metinleri de kullanıcıya ulaşabildiği için
+            // burada ayrıca Türkçeleştiriyoruz.
+            .replace("Gemini AI service not initialized", "Gemini yapay zekâ hizmeti başlatılmadı")
+            .replace("Gemini API quota exceeded. Switching to another provider...", "Gemini API kotası aşıldı. Başka bir sağlayıcıya geçiliyor...")
+            .replace("Gemini rate limit exceeded. Switching to another provider...", "Gemini istek sınırı aşıldı. Başka bir sağlayıcıya geçiliyor...")
+            .replace("Invalid Gemini API key. Please check your configuration.", "Geçersiz Gemini API anahtarı. Lütfen yapılandırmanızı kontrol edin.")
+            .replace("OpenAI service not initialized", "OpenAI hizmeti başlatılmadı")
+            .replace("OpenAI rate limit exceeded: ", "OpenAI istek sınırı aşıldı: ")
+            .replace("OpenAI quota exceeded: ", "OpenAI API kotası aşıldı: ")
+            .replace("Invalid OpenAI API key: ", "Geçersiz OpenAI API anahtarı: ")
+            .replace("OpenAI authentication failed: ", "OpenAI kimlik doğrulaması başarısız: ")
+            .replace("OpenAI API error", "OpenAI API hatası")
+            .replace("No response from OpenAI API", "OpenAI API'den yanıt alınamadı")
+            .replace("OpenAI request timeout: ", "OpenAI isteğinde zaman aşımı: ")
+            .replace("Network error - cannot reach OpenAI: ", "Ağ hatası - OpenAI'ye ulaşılamadı: ")
+            .replace("File writer not initialized", "Dosya yazma bileşeni başlatılmadı")
+            .replace("Empty response from AI", "Yapay zekâdan boş yanıt alındı")
     }
 
     fun cancel() {
