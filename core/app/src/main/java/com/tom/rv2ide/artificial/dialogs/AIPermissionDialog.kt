@@ -17,13 +17,9 @@
 
 package com.tom.rv2ide.artificial.dialogs
 
-import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
-import android.widget.Button
 import android.widget.CheckBox
-import android.widget.TextView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.tom.rv2ide.R
 import com.tom.rv2ide.artificial.permissions.AIPermissionManager
@@ -42,17 +38,17 @@ class AIPermissionDialog(private val context: Context) {
         onDeny: () -> Unit
     ) {
         MaterialAlertDialogBuilder(context)
-            .setTitle("AI File Write Permission")
-            .setMessage("AI wants to write to:\n$fileName\n\nAllow this action?")
-            .setPositiveButton("Allow") { dialog, _ ->
+            .setTitle("Yapay Zekâ Dosya Yazma İzni")
+            .setMessage("Yapay zekâ şu dosyaya yazmak istiyor:\n$fileName\n\nBu işleme izin verilsin mi?")
+            .setPositiveButton("İzin Ver") { dialog, _ ->
                 onConfirm()
                 dialog.dismiss()
             }
-            .setNegativeButton("Deny") { dialog, _ ->
+            .setNegativeButton("Reddet") { dialog, _ ->
                 onDeny()
                 dialog.dismiss()
             }
-            .setNeutralButton("Always Allow") { dialog, _ ->
+            .setNeutralButton("Her Zaman İzin Ver") { dialog, _ ->
                 permissionManager.setRequireConfirmation(false)
                 onConfirm()
                 dialog.dismiss()
@@ -62,31 +58,26 @@ class AIPermissionDialog(private val context: Context) {
     }
 
     fun showPermissionSettings(onSettingsChanged: () -> Unit) {
-        val view = LayoutInflater.from(context).inflate(
-            R.layout.dialog_ai_permissions, 
-            null
-        )
-
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_ai_permissions, null)
         val enableWriteCheckbox: CheckBox = view.findViewById(R.id.enableWriteCheckbox)
         val requireConfirmationCheckbox: CheckBox = view.findViewById(R.id.requireConfirmationCheckbox)
         val autoBackupCheckbox: CheckBox = view.findViewById(R.id.autoBackupCheckbox)
 
-        // Load current settings
         enableWriteCheckbox.isChecked = permissionManager.isFileWriteEnabled()
         requireConfirmationCheckbox.isChecked = permissionManager.requiresConfirmation()
         autoBackupCheckbox.isChecked = permissionManager.isAutoBackupEnabled()
 
         MaterialAlertDialogBuilder(context)
-            .setTitle("AI Permissions")
+            .setTitle("Yapay Zekâ İzinleri")
             .setView(view)
-            .setPositiveButton("Save") { dialog, _ ->
+            .setPositiveButton("Kaydet") { dialog, _ ->
                 permissionManager.setFileWriteEnabled(enableWriteCheckbox.isChecked)
                 permissionManager.setRequireConfirmation(requireConfirmationCheckbox.isChecked)
                 permissionManager.setAutoBackup(autoBackupCheckbox.isChecked)
                 onSettingsChanged()
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton("İptal") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
