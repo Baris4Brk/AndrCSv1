@@ -78,7 +78,7 @@ class GitViewModel : ViewModel() {
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "User config updated" else "Failed to update user config"
+                        message = if (success) "Kullanıcı yapılandırması güncellendi" else "Kullanıcı yapılandırması güncellenemedi"
                     )
                 )
             }
@@ -123,7 +123,7 @@ class GitViewModel : ViewModel() {
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "Remote added successfully" else "Failed to add remote"
+                        message = if (success) "Uzak depo başarıyla eklendi" else "Uzak depo eklenemedi"
                     )
                 )
                 if (success) refreshRemotes()
@@ -138,7 +138,7 @@ class GitViewModel : ViewModel() {
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "Remote removed" else "Failed to remove remote"
+                        message = if (success) "Uzak depo kaldırıldı" else "Uzak depo kaldırılamadı"
                     )
                 )
                 if (success) refreshRemotes()
@@ -148,13 +148,13 @@ class GitViewModel : ViewModel() {
     
     fun stageFile(filePath: String) {
         viewModelScope.launch {
-            _progressMessage.postValue("Staging file...")
+            _progressMessage.postValue("Dosya hazırlanıyor...")
             withContext(Dispatchers.IO) {
                 val success = gitManager?.stageFile(filePath) ?: false
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "File staged" else "Failed to stage file"
+                        message = if (success) "Dosya hazırlandı" else "Dosya hazırlanamadı"
                     )
                 )
                 if (success) refreshChangedFiles()
@@ -165,13 +165,13 @@ class GitViewModel : ViewModel() {
     
     fun stageAllFiles() {
         viewModelScope.launch {
-            _progressMessage.postValue("Staging all files...")
+            _progressMessage.postValue("Tüm dosyalar hazırlanıyor...")
             withContext(Dispatchers.IO) {
                 val success = gitManager?.stageAllFiles() ?: false
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "All files staged" else "Failed to stage files"
+                        message = if (success) "Tüm dosyalar hazırlandı" else "Dosyalar hazırlanamadı"
                     )
                 )
                 if (success) refreshChangedFiles()
@@ -182,13 +182,13 @@ class GitViewModel : ViewModel() {
 
     fun unstageFile(filePath: String) {
         viewModelScope.launch {
-            _progressMessage.postValue("Unstaging file...")
+            _progressMessage.postValue("Dosyanın hazırlığı kaldırılıyor...")
             withContext(Dispatchers.IO) {
                 val success = gitManager?.unstageFile(filePath) ?: false
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "File unstaged" else "Failed to unstage file"
+                        message = if (success) "Dosyanın hazırlığı kaldırıldı" else "Dosyanın hazırlığı kaldırılamadı"
                     )
                 )
                 if (success) refreshChangedFiles()
@@ -199,10 +199,10 @@ class GitViewModel : ViewModel() {
     
     fun fetch(remoteName: String = "origin", username: String? = null, password: String? = null) {
         viewModelScope.launch {
-            _progressMessage.postValue("Fetching from remote...")
+            _progressMessage.postValue("Uzak depodan getiriliyor...")
             withContext(Dispatchers.IO) {
                 val result = gitManager?.fetch(remoteName, username, password)
-                    ?: FetchResult(false, "Git manager not initialized")
+                    ?: FetchResult(false, "Git yöneticisi başlatılmadı")
                 _pushPullResult.postValue(
                     RemoteOperationResult(
                         success = result.success,
@@ -220,13 +220,13 @@ class GitViewModel : ViewModel() {
     
     fun discardChanges(filePath: String) {
         viewModelScope.launch {
-            _progressMessage.postValue("Discarding changes...")
+            _progressMessage.postValue("Değişiklikler atılıyor...")
             withContext(Dispatchers.IO) {
                 val success = gitManager?.discardChanges(filePath) ?: false
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "Changes discarded" else "Failed to discard changes"
+                        message = if (success) "Değişiklikler atıldı" else "Değişiklikler atılamadı"
                     )
                 )
                 if (success) refreshChangedFiles()
@@ -237,13 +237,13 @@ class GitViewModel : ViewModel() {
     
     fun createBranch(branchName: String) {
         viewModelScope.launch {
-            _progressMessage.postValue("Creating branch...")
+            _progressMessage.postValue("Dal oluşturuluyor...")
             withContext(Dispatchers.IO) {
                 val success = gitManager?.createBranch(branchName) ?: false
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "Branch created" else "Failed to create branch"
+                        message = if (success) "Dal oluşturuldu" else "Dal oluşturulamadı"
                     )
                 )
                 if (success) {
@@ -256,13 +256,13 @@ class GitViewModel : ViewModel() {
     
     fun checkoutBranch(branchName: String) {
         viewModelScope.launch {
-            _progressMessage.postValue("Switching branch...")
+            _progressMessage.postValue("Dal değiştiriliyor...")
             withContext(Dispatchers.IO) {
                 val success = gitManager?.checkoutBranch(branchName) ?: false
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "Switched to $branchName" else "Failed to checkout branch"
+                        message = if (success) "$branchName dalına geçildi" else "Dala geçilemedi"
                     )
                 )
                 if (success) {
@@ -275,13 +275,13 @@ class GitViewModel : ViewModel() {
     
     fun deleteBranch(branchName: String) {
         viewModelScope.launch {
-            _progressMessage.postValue("Deleting branch...")
+            _progressMessage.postValue("Dal siliniyor...")
             withContext(Dispatchers.IO) {
                 val success = gitManager?.deleteBranch(branchName) ?: false
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "Branch deleted" else "Failed to delete branch"
+                        message = if (success) "Dal silindi" else "Dal silinemedi"
                     )
                 )
                 if (success) refreshBranches()
@@ -292,13 +292,13 @@ class GitViewModel : ViewModel() {
 
     fun commit(message: String, author: String, email: String) {
         viewModelScope.launch {
-            _progressMessage.postValue("Committing changes...")
+            _progressMessage.postValue("Değişiklikler kaydediliyor...")
             withContext(Dispatchers.IO) {
                 val success = gitManager?.commit(message, author, email) ?: false
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "Changes committed" else "Failed to commit"
+                        message = if (success) "Değişiklikler kaydedildi" else "Değişiklikler kaydedilemedi"
                     )
                 )
                 if (success) {
@@ -312,10 +312,10 @@ class GitViewModel : ViewModel() {
     
     fun push(remoteName: String = "origin", branchName: String? = null, username: String? = null, password: String? = null) {
         viewModelScope.launch {
-            _progressMessage.postValue("Pushing to remote...")
+            _progressMessage.postValue("Uzak depoya gönderiliyor...")
             withContext(Dispatchers.IO) {
                 val result = gitManager?.push(remoteName, branchName, username, password) 
-                    ?: PushResult(false, "Git manager not initialized")
+                    ?: PushResult(false, "Git yöneticisi başlatılmadı")
                 _pushPullResult.postValue(
                     RemoteOperationResult(
                         success = result.success,
@@ -330,10 +330,10 @@ class GitViewModel : ViewModel() {
     
     fun pull(remoteName: String = "origin", branchName: String? = null, username: String? = null, password: String? = null) {
         viewModelScope.launch {
-            _progressMessage.postValue("Pulling from remote...")
+            _progressMessage.postValue("Uzak depodan değişiklikler alınıyor...")
             withContext(Dispatchers.IO) {
                 val result = gitManager?.pull(remoteName, branchName, username, password)
-                    ?: PullResult(false, "Git manager not initialized")
+                    ?: PullResult(false, "Git yöneticisi başlatılmadı")
                 _pushPullResult.postValue(
                     RemoteOperationResult(
                         success = result.success,
@@ -351,7 +351,7 @@ class GitViewModel : ViewModel() {
     
     fun cloneRepository(remoteUrl: String, localPath: String, username: String? = null, password: String? = null) {
         viewModelScope.launch {
-            _progressMessage.postValue("Cloning repository...")
+            _progressMessage.postValue("Depo kopyalanıyor...")
             withContext(Dispatchers.IO) {
                 gitManager = GitManager(localPath)
                 val success = gitManager?.clone(remoteUrl, localPath, username, password) ?: false
@@ -363,7 +363,7 @@ class GitViewModel : ViewModel() {
                     _operationResult.postValue(
                         OperationResult(
                             success = false,
-                            message = "Failed to clone repository"
+                            message = "Depo kopyalanamadı"
                         )
                     )
                 }
@@ -374,7 +374,7 @@ class GitViewModel : ViewModel() {
     
     fun initializeRepository(path: String, initialBranch: String = "main") {
         viewModelScope.launch {
-            _progressMessage.postValue("Initializing repository...")
+            _progressMessage.postValue("Depo başlatılıyor...")
             withContext(Dispatchers.IO) {
                 gitManager = GitManager(path)
                 val success = gitManager?.initRepository(initialBranchName = initialBranch) ?: false
@@ -392,7 +392,7 @@ class GitViewModel : ViewModel() {
     
     fun openExistingRepository(path: String) {
         viewModelScope.launch {
-            _progressMessage.postValue("Opening repository...")
+            _progressMessage.postValue("Mevcut depo açılıyor...")
             withContext(Dispatchers.IO) {
                 gitManager = GitManager(path)
                 val success = gitManager?.openRepository() ?: false
@@ -451,7 +451,7 @@ class GitViewModel : ViewModel() {
                 _operationResult.postValue(
                     OperationResult(
                         success = success,
-                        message = if (success) "Changes committed" else "Failed to commit"
+                        message = if (success) "Değişiklikler kaydedildi" else "Değişiklikler kaydedilemedi"
                     )
                 )
                 if (success) {
