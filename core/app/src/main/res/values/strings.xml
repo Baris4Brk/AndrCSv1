@@ -31,25 +31,25 @@
   <string name="sub_module_info_title">Alt Modüller Hakkında</string>
   <string name="sub_module_info_description">Alt modüller, projenizi daha küçük ve yönetilebilir bileşenlere ayırmanıza yardımcı olur. Her modülün kendi bağımlılıkları ve derleme yapılandırması olabilir.</string>
 
-  <!-- Yapay Zekâ / Agent -->
-  <string name="ai_agent_title">Yapay Zekâ Agent</string>
-  <string name="ai_agent_description">Yapay Zekâ Agent kullanarak yapay zekâ destekli kod üretimi</string>
-  <string name="ai_agent_enable">Yapay Zekâ Agent'ını Etkinleştir</string>
+  <!-- Yapay Zekâ -->
+  <string name="ai_agent_title">Yapay Zekâ Ajanı</string>
+  <string name="ai_agent_description">Yapay Zekâ Ajanı kullanarak yapay zekâ destekli kod üretimi</string>
+  <string name="ai_agent_enable">Yapay Zekâ Ajanını Etkinleştir</string>
   <string name="ai_agent_grok_api_key">Grok API Anahtarı</string>
-  <string name="ai_agent_note">Agent, projenizdeki dosyaları analiz ederek gerekli değişiklikleri gerçekleştirebilir. Yapacağı işlemleri göndermeden önce kontrol edin.</string>
+  <string name="ai_agent_note">Ajan, projenizdeki dosyaları analiz ederek gerekli değişiklikleri gerçekleştirebilir. Yapacağı işlemleri göndermeden önce kontrol edin.</string>
   <string name="ai_agent_ask_hint">Yapay zekâya bir şey sorun...</string>
   <string name="ai_agent_send">Gönder</string>
   <string name="ai_agent_clear">Temizle</string>
   <string name="ai_agent_status">Durum</string>
-  <string name="ai_agent_error">Agent hatası</string>
+  <string name="ai_agent_error">Ajan hatası</string>
   <string name="ai_agent_history">Geçmiş</string>
   <string name="ai_agent_workspace">Çalışma Alanı</string>
   <string name="ai_agent_project_scope">Proje kapsamı</string>
   <string name="ai_agent_chat">Sohbet</string>
   <string name="ai_agent_settings">Ayarlar</string>
-  <string name="ai_agent_select">Agent seçin</string>
-  <string name="ai_agent_ready">Agent hazır</string>
-  <string name="ai_agent_working">Agent çalışıyor...</string>
+  <string name="ai_agent_select">Ajan seçin</string>
+  <string name="ai_agent_ready">Ajan hazır</string>
+  <string name="ai_agent_working">Ajan çalışıyor...</string>
   <string name="ai_agent_success">İşlem başarıyla tamamlandı</string>
   <string name="ai_agent_failed">İşlem başarısız oldu</string>
 
